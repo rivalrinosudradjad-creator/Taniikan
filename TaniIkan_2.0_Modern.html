@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071f2b">
+<meta name="description" content="TaniIkan 2.0 — dashboard budidaya ikan yang modern dan praktis.">
+<title>TaniIkan 2.0 — Smart Aquaculture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f7f8;--card:#fff;--text:#132a35;--muted:#71828a;--line:#e2eaed;--accent:#087f8c;--accent-dark:#06616b;--accent2:#e2f6f5;--danger:#c83e4d;--warn:#a86a05;--navy:#071f2b;--mint:#c8f7e8;--shadow:0 10px 30px rgba(13,50,62,.06)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at 90% 0%,#e2f5f2 0,transparent 27%),var(--bg);color:var(--text)}
+button,input,select{font:inherit}.app{max-width:1180px;margin:auto;padding:26px 22px 18px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(125deg,#071f2b 0%,#0b5964 58%,#078a8b 100%);color:white;border-radius:28px;padding:30px 32px;margin-bottom:22px;box-shadow:0 18px 42px rgba(7,64,76,.18)}
+.hero:after{content:"";position:absolute;width:280px;height:280px;border:1px solid rgba(255,255,255,.14);border-radius:50%;right:-65px;top:-125px;box-shadow:0 0 0 35px rgba(255,255,255,.035),0 0 0 70px rgba(255,255,255,.025)}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;margin:0;font-size:clamp(27px,4vw,38px);letter-spacing:-1.3px;position:relative;z-index:1}
+.hero p{margin:10px 0 0;max-width:650px;line-height:1.65;color:#d4eeee;position:relative;z-index:1;font-size:15px}
+.hero:before{content:"";position:absolute;right:70px;bottom:-80px;width:170px;height:170px;background:rgba(140,255,221,.09);border-radius:50%}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:7px;margin:0 0 20px;position:sticky;top:0;background:rgba(243,247,248,.92);backdrop-filter:blur(14px);z-index:5;border:1px solid rgba(226,234,237,.8);border-radius:17px}
+.tab{border:1px solid transparent;background:transparent;color:#627780;padding:11px 15px;border-radius:12px;white-space:nowrap;font-weight:700;cursor:pointer;transition:.2s}
+.tab:hover{background:#e8f2f3;color:var(--accent-dark)}.tab.active{background:var(--navy);color:white;box-shadow:0 5px 14px rgba(7,31,43,.16)}
+.panel{display:none;animation:fadeIn .22s ease}.panel.active{display:block}
+@keyframes fadeIn{from{opacity:.45;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:21px;padding:20px;margin-bottom:15px;box-shadow:var(--shadow);transition:transform .18s,border-color .18s}
+.card h2,.card h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.35px;margin:0 0 12px}.card h2{font-size:18px}.card h3{font-size:16px}
+.stat{position:relative;overflow:hidden;min-height:124px;padding:20px}.stat:after{content:"";position:absolute;width:76px;height:76px;right:-23px;bottom:-28px;background:var(--accent2);border-radius:50%}
+.stat small,.label{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.15px}.stat b{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(21px,2.4vw,29px);letter-spacing:-.8px;margin-top:12px;position:relative;z-index:1;overflow-wrap:anywhere}
+label{font-size:12px;color:#687b83;display:block;font-weight:700}
+input,select{width:100%;padding:12px 13px;border:1px solid #dce6e9;border-radius:12px;background:#fbfdfd;font-size:14px;margin-top:7px;color:var(--text);outline:none;transition:border .18s,box-shadow .18s}
+input:focus,select:focus{border-color:#48aeb0;box-shadow:0 0 0 3px rgba(8,127,140,.11);background:white}
+.btn{border:0;background:linear-gradient(135deg,var(--accent),#0b9b9a);color:white;padding:11px 16px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 5px 12px rgba(8,127,140,.13);transition:transform .16s,filter .16s}
+.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}.btn:active{transform:translateY(0)}.btn.secondary{background:#e5f5f4;color:#08727a;box-shadow:none}.btn.danger{background:#fff0f1;color:var(--danger);box-shadow:none}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.result{background:#e8f8f2;border:1px solid #d1f0e4;color:#17634f;border-radius:15px;padding:15px;line-height:1.6}
+.warning{background:#fff6df;border:1px solid #f6e6b8;color:#76510a;border-radius:15px;padding:15px;line-height:1.6}
+.dangerbox{background:#fff0f0;border:1px solid #f7d3d6;color:#922c37;border-radius:15px;padding:15px;line-height:1.6}
+.list{display:grid;gap:9px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fcfefe}
+.row b{overflow-wrap:anywhere}.row .meta{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.5}.price{font-weight:800;color:var(--accent-dark)}
+.bar{height:10px;background:#e8edef;border-radius:10px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,#087f8c,#6bd6bd);border-radius:10px}
+.empty{text-align:center;color:var(--muted);padding:26px 15px;border:1px dashed #d4e1e5;border-radius:14px;background:#fbfdfd}
+.mini{font-size:12px;color:var(--muted);line-height:1.65}.footer{text-align:center;color:#819198;font-size:12px;padding:24px 8px 10px}
+#feedResult:empty,#fcrResult:empty{display:none}
+@media(max-width:850px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.app{padding:16px}.hero{padding:24px;border-radius:23px}.tabs{top:0}}
+@media(max-width:560px){.two,.three{grid-template-columns:1fr}.app{padding:10px}.hero{padding:21px}.hero h1{font-size:26px}.hero p{font-size:13px}.tabs{gap:4px;padding:5px;border-radius:14px}.tab{padding:10px 12px;font-size:12px}.card{padding:16px;border-radius:17px}.stats{gap:9px}.stat{padding:15px;min-height:105px}.stat b{font-size:22px}.row{align-items:flex-start;flex-direction:column}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+  <h1>🐟 TaniIkan <span style="color:#9ef1d7">2.0</span></h1>
+  <p>Smart aquaculture dashboard — kelola kolam, pantau pakan, hitung performa budidaya, dan catat keuangan dalam satu tempat.</p>
+</header>
+
+<nav class="tabs" id="tabs">
+<button class="tab active" data-panel="dashboard">🏠 Dashboard</button>
+<button class="tab" data-panel="kolam">🐟 Kolam</button>
+<button class="tab" data-panel="pakan">🍚 Pakan</button>
+<button class="tab" data-panel="keuangan">💰 Keuangan</button>
+<button class="tab" data-panel="fcr">📊 FCR & Panen</button>
+<button class="tab" data-panel="pasar">🛒 Marketplace</button>
+<button class="tab" data-panel="komunitas">👥 Komunitas</button>
+</nav>
+
+<section id="dashboard" class="panel active">
+<div class="grid stats">
+ <div class="card stat"><small>Kolam</small><b id="dPonds">0</b></div>
+ <div class="card stat"><small>Total ikan</small><b id="dFish">0</b></div>
+ <div class="card stat"><small>Biomassa</small><b id="dBio">0 kg</b></div>
+ <div class="card stat"><small>Estimasi laba</small><b id="dProfit">Rp0</b></div>
+</div>
+<div class="card">
+<h2>📌 Ringkasan budidaya</h2>
+<div id="dashboardSummary" class="list"></div>
+</div>
+<div class="card">
+<h2>💧 Monitoring kualitas air</h2>
+<div class="grid three">
+<div><span class="label">🌡️ Suhu</span><h3>28,4°C</h3></div>
+<div><span class="label">🧪 pH</span><h3>7,1</h3></div>
+<div><span class="label">💧 O₂</span><h3>6,8 mg/L</h3></div>
+</div>
+<p class="mini">Data di atas adalah contoh. Nantinya dapat diganti dengan data sensor IoT.</p>
+</div>
+</section>
+
+<section id="kolam" class="panel">
+<div class="card">
+<h2>🐟 Tambah kolam</h2>
+<div class="grid two">
+<label>Nama kolam<input id="pondName" placeholder="Contoh: Lele 01"></label>
+<label>Jenis ikan<select id="pondSpecies"><option>Lele</option><option>Nila</option><option>Patin</option><option>Gurame</option><option>Ikan Mas</option><option>Lainnya</option></select></label>
+<label>Jumlah ikan<input id="pondCount" type="number" min="1" placeholder="2000"></label>
+<label>Bobot rata-rata (gram)<input id="pondWeight" type="number" min=".1" placeholder="50"></label>
+<label>Harga jual target / kg<input id="pondPrice" type="number" min="0" placeholder="25000"></label>
+</div>
+<div class="actions"><button class="btn" onclick="addPond()">+ Simpan kolam</button></div>
+</div>
+<div class="card"><h2>Daftar kolam</h2><div id="pondList" class="list"></div></div>
+</section>
+
+<section id="pakan" class="panel">
+<div class="card">
+<h2>🍚 Pakan Otomatis</h2>
+<p class="mini">Feeding rate adalah parameter awal yang harus disesuaikan dengan spesies, ukuran, umur, suhu, sistem budidaya, dan respons ikan.</p>
+<div class="grid two">
+<label>Pilih kolam<select id="feedPond"></select></label>
+<label>Feeding rate (% biomassa/hari)<input id="feedRate" type="number" step=".1" min=".1" value="3"></label>
+<label>Pemberian per hari<select id="feedSessions"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+<label>Sisa pakan (gram)<input id="feedLeft" type="number" min="0" value="0"></label>
+</div>
+<div class="actions"><button class="btn" onclick="calculateFeed()">Hitung & evaluasi</button><button class="btn secondary" onclick="saveFeed()">Simpan pemberian pakan</button></div>
+</div>
+<div class="grid three">
+<div class="card stat"><small>Biomassa</small><b id="feedBio">0 kg</b></div>
+<div class="card stat"><small>Pakan / hari</small><b id="feedDaily">0 g</b></div>
+<div class="card stat"><small>Pakan / sesi</small><b id="feedSession">0 g</b></div>
+</div>
+<div id="feedResult" class="card"></div>
+</section>
+
+<section id="keuangan" class="panel">
+<div class="card">
+<h2>💰 Catat biaya & pendapatan</h2>
+<div class="grid two">
+<label>Kolam<select id="moneyPond"></select></label>
+<label>Kategori<select id="moneyCategory"><option>Benih</option><option>Pakan</option><option>Obat/Perawatan</option><option>Listrik/Air</option><option>Alat</option><option>Lainnya</option><option>Pendapatan Panen</option></select></label>
+<label>Nominal (Rp)<input id="moneyAmount" type="number" min="1" placeholder="100000"></label>
+<label>Keterangan<input id="moneyNote" placeholder="Pembelian pakan"></label>
+</div>
+<div class="actions"><button class="btn" onclick="addMoney()">+ Simpan transaksi</button></div>
+</div>
+<div class="grid three">
+<div class="card stat"><small>Total biaya</small><b id="mCost">Rp0</b></div>
+<div class="card stat"><small>Pendapatan</small><b id="mRevenue">Rp0</b></div>
+<div class="card stat"><small>Laba</small><b id="mProfit">Rp0</b></div>
+</div>
+<div class="card"><h2>Riwayat transaksi</h2><div id="moneyList" class="list"></div></div>
+</section>
+
+<section id="fcr" class="panel">
+<div class="card">
+<h2>📊 FCR & Estimasi Panen</h2>
+<p class="mini">FCR = total pakan / pertambahan biomassa. Untuk hasil bermakna, gunakan data biomassa pada periode yang sama.</p>
+<div class="grid two">
+<label>Kolam<select id="fcrPond"></select></label>
+<label>Biomassa awal (kg)<input id="fcrStart" type="number" min="0" step=".01" placeholder="100"></label>
+<label>Biomassa sekarang (kg)<input id="fcrNow" type="number" min="0" step=".01" placeholder="130"></label>
+<label>Total pakan periode (kg)<input id="fcrFeed" type="number" min="0" step=".01" placeholder="45"></label>
+<label>Survival rate (%)<input id="fcrSurvival" type="number" min="0" max="100" value="90"></label>
+<label>Target biomassa panen (kg)<input id="fcrTarget" type="number" min="0" step=".01" placeholder="250"></label>
+</div>
+<div class="actions"><button class="btn" onclick="calculateFCR()">Hitung FCR</button><button class="btn secondary" onclick="saveFCR()">Simpan hasil sampling</button></div>
+</div>
+<div class="grid three">
+<div class="card stat"><small>Pertambahan biomassa</small><b id="fGain">0 kg</b></div>
+<div class="card stat"><small>FCR</small><b id="fValue">—</b></div>
+<div class="card stat"><small>Estimasi tambahan pakan</small><b id="fExtra">—</b></div>
+</div>
+<div id="fcrResult" class="card"></div>
+<div class="card"><h2>Riwayat sampling</h2><div id="samplingList" class="list"></div></div>
+</section>
+
+<section id="pasar" class="panel">
+<div class="card"><h2>🛒 Marketplace</h2><p class="mini">Contoh marketplace. Tahap berikutnya bisa ditambahkan akun penjual, foto produk, stok, chat, dan pembayaran.</p></div>
+<div class="grid two">
+<div class="card"><h3>🐟 Lele Segar</h3><p>Rp25.000/kg · stok 80 kg</p><button class="btn secondary">Lihat produk</button></div>
+<div class="card"><h3>🐠 Nila Segar</h3><p>Rp32.000/kg · stok 45 kg</p><button class="btn secondary">Lihat produk</button></div>
+</div>
+</section>
+
+<section id="komunitas" class="panel">
+<div class="card"><h2>👥 Komunitas Pembudidaya</h2><p class="mini">Ruang berbagi budidaya, coding, IoT, desain, riset, dan proyek.</p></div>
+<div class="list">
+<div class="card"><b>💡 Sensor pH murah untuk kolam</b><p class="mini">Bagaimana menghubungkan sensor pH ke ESP32?</p></div>
+<div class="card"><b>📈 Bagaimana menghitung FCR?</b><p class="mini">Berbagi pengalaman pencatatan pakan dan pertumbuhan.</p></div>
+<div class="card"><b>💻 Proyek komunitas: Smart Pond</b><p class="mini">Kolaborasi mahasiswa perikanan dan programmer.</p></div>
+</div>
+</section>
+
+<div class="footer">TaniIkan 2.0 · Data tersimpan di browser perangkat ini.</div>
+</div>
+
+<script>
+const KEY='taniikan20';
+let db; try { db=JSON.parse(localStorage.getItem(KEY)||'null')||{ponds:[],money:[],feed:[],sampling:[]}; } catch(e) { db={ponds:[],money:[],feed:[],sampling:[]}; }
+function save(){localStorage.setItem(KEY,JSON.stringify(db));}
+const rupiah=n=>'Rp'+Number(n||0).toLocaleString('id-ID');
+const num=n=>Number(n||0);
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.panel).classList.add('active');});
+function pondOptions(id){let s=document.getElementById(id);s.innerHTML=db.ponds.length?db.ponds.map(p=>`<option value="${p.id}">${esc(p.name)} — ${esc(p.species)}</option>`).join(''):'<option value="">Belum ada kolam</option>';}
+function refreshSelectors(){['feedPond','moneyPond','fcrPond'].forEach(pondOptions);}
+function addPond(){
+ let name=pondName.value.trim(),species=pondSpecies.value,count=num(pondCount.value),weight=num(pondWeight.value),price=num(pondPrice.value);
+ if(!name||count<1||weight<=0){alert('Isi nama, jumlah ikan, dan bobot rata-rata.');return;}
+ db.ponds.push({id:Date.now(),name,species,count,weight,price});save();pondName.value='';pondCount.value='';pondWeight.value='';pondPrice.value='';render();alert('Kolam berhasil ditambahkan.');
+}
+function renderPonds(){
+ let el=document.getElementById('pondList');el.innerHTML=db.ponds.length?db.ponds.map(p=>{let bio=p.count*p.weight/1000;return `<div class="row"><div><b>${esc(p.name)}</b><div class="meta">${esc(p.species)} · ${p.count.toLocaleString('id-ID')} ekor · ${bio.toFixed(2)} kg biomassa</div></div><button class="btn danger" onclick="deletePond(${p.id})">Hapus</button></div>`}).join(''):'<div class="empty">Belum ada kolam. Tambahkan kolam pertama.</div>';
+}
+function deletePond(id){if(confirm('Hapus kolam dan data terkait?')){db.ponds=db.ponds.filter(p=>p.id!==id);save();render();}}
+function calculateFeed(){
+ let p=db.ponds.find(x=>x.id==feedPond.value),rate=num(feedRate.value),sessions=num(feedSessions.value),left=num(feedLeft.value);
+ if(!p){feedResult.innerHTML='<div class="warning">Tambahkan kolam terlebih dahulu.</div>';return;}
+ let bio=p.count*p.weight/1000,dailyKg=bio*rate/100,dailyG=dailyKg*1000,session=dailyG/sessions,ratio=dailyG?left/dailyG*100:0;
+ feedBio.textContent=bio.toFixed(2)+' kg';feedDaily.textContent=dailyG.toFixed(1)+' g';feedSession.textContent=session.toFixed(1)+' g';
+ let html='';
+ if(ratio>10) html=`<div class="dangerbox"><b>🔴 Sisa pakan tinggi (${ratio.toFixed(1)}%)</b><br>Jangan menaikkan pakan. Sebagai aturan aplikasi sementara, dosis berikutnya dapat diturunkan sekitar 20% sambil mengecek respons ikan dan kualitas air.</div>`;
+ else if(ratio>3) html=`<div class="warning"><b>🟡 Ada sisa pakan (${ratio.toFixed(1)}%)</b><br>Aturan aplikasi menyarankan pengurangan sekitar 10% dan evaluasi kembali pada pemberian berikutnya.</div>`;
+ else html=`<div class="result"><b>🟢 Sisa rendah (${ratio.toFixed(1)}%)</b><br>Pertahankan dan pantau nafsu makan, kondisi ikan, serta kualitas air.</div>`;
+ feedResult.innerHTML=html+`<p class="mini">Kebutuhan dasar: ${dailyG.toFixed(1)} g/hari atau ${session.toFixed(1)} g/sesi. Angka ini adalah alat bantu, bukan dosis universal.</p>`;
+ return {p,bio,dailyG,session,ratio};
+}
+function saveFeed(){let r=calculateFeed();if(!r)return;db.feed.push({date:new Date().toISOString(),pondId:r.p.id,dailyG:r.dailyG,left:num(feedLeft.value)});let cost=r.dailyG/1000*0;save();renderMoney();alert('Catatan pakan tersimpan.');}
+function addMoney(){
+ let pondId=moneyPond.value,cat=moneyCategory.value,amount=num(moneyAmount.value),note=moneyNote.value.trim();
+ if(!pondId||amount<=0){alert('Pilih kolam dan isi nominal.');return;}
+ db.money.push({date:new Date().toISOString(),pondId,cat,amount,note});save();moneyAmount.value='';moneyNote.value='';render();alert('Transaksi tersimpan.');
+}
+function renderMoney(){
+ let cost=db.money.filter(x=>x.cat!=='Pendapatan Panen').reduce((a,x)=>a+x.amount,0),rev=db.money.filter(x=>x.cat==='Pendapatan Panen').reduce((a,x)=>a+x.amount,0);
+ mCost.textContent=rupiah(cost);mRevenue.textContent=rupiah(rev);mProfit.textContent=rupiah(rev-cost);
+ moneyList.innerHTML=db.money.length?[...db.money].reverse().map(x=>{let p=db.ponds.find(p=>p.id==x.pondId);return `<div class="row"><div><b>${esc(x.cat)}</b><div class="meta">${p?esc(p.name):'Kolam terhapus'} · ${esc(x.note||'-')}</div></div><b class="price">${rupiah(x.amount)}</b></div>`}).join(''):'<div class="empty">Belum ada transaksi.</div>';
+}
+function calculateFCR(){
+ let start=num(fcrStart.value),now=num(fcrNow.value),feed=num(fcrFeed.value),target=num(fcrTarget.value),surv=num(fcrSurvival.value);
+ let gain=now-start;fGain.textContent=gain.toFixed(2)+' kg';
+ if(gain<=0||feed<=0){fValue.textContent='—';fExtra.textContent='—';fcrResult.innerHTML='<div class="warning">Masukkan biomassa awal, biomassa sekarang, dan total pakan yang sesuai periode.</div>';return;}
+ let fcr=feed/gain;fValue.textContent=fcr.toFixed(2);
+ let extra=target>now? (target-now)*fcr:0;fExtra.textContent=extra.toFixed(2)+' kg';
+ let quality=fcr<=1.5?'🟢 relatif efisien':fcr<=2?'🟡 perlu dipantau':'🔴 perlu dievaluasi';
+ fcrResult.innerHTML=`<div class="result"><b>${quality}</b><br>FCR periode ini <b>${fcr.toFixed(2)}</b>. Survival rate yang dicatat: ${surv.toFixed(1)}%.</div><p class="mini">FCR dipengaruhi spesies, ukuran ikan, kualitas pakan, lingkungan, mortalitas, dan cara pencatatan. Jangan membandingkan angka tanpa konteks.</p>`;
+ return {fcr,gain,extra};
+}
+function saveFCR(){let r=calculateFCR();if(!r)return;let p=db.ponds.find(x=>x.id==fcrPond.value);db.sampling.push({date:new Date().toISOString(),pondId:p?p.id:null,start:num(fcrStart.value),now:num(fcrNow.value),feed:num(fcrFeed.value),fcr:r.fcr});save();renderSampling();alert('Sampling tersimpan.');}
+function renderSampling(){samplingList.innerHTML=db.sampling.length?[...db.sampling].reverse().map(x=>{let p=db.ponds.find(p=>p.id==x.pondId);return `<div class="row"><div><b>${p?esc(p.name):'Kolam'}</b><div class="meta">Biomassa ${x.start} → ${x.now} kg · pakan ${x.feed} kg</div></div><b>FCR ${x.fcr.toFixed(2)}</b></div>`}).join(''):'<div class="empty">Belum ada sampling.</div>';}
+function renderDashboard(){
+ let fish=db.ponds.reduce((a,p)=>a+p.count,0),bio=db.ponds.reduce((a,p)=>a+p.count*p.weight/1000,0),cost=db.money.filter(x=>x.cat!=='Pendapatan Panen').reduce((a,x)=>a+x.amount,0),rev=db.money.filter(x=>x.cat==='Pendapatan Panen').reduce((a,x)=>a+x.amount,0);
+ dPonds.textContent=db.ponds.length;dFish.textContent=fish.toLocaleString('id-ID');dBio.textContent=bio.toFixed(2)+' kg';dProfit.textContent=rupiah(rev-cost);
+ dashboardSummary.innerHTML=db.ponds.length?db.ponds.map(p=>`<div class="row"><div><b>${esc(p.name)}</b><div class="meta">${esc(p.species)} · ${p.count.toLocaleString('id-ID')} ekor</div></div><span>${(p.count*p.weight/1000).toFixed(1)} kg</span></div>`).join(''):'<div class="empty">Belum ada data kolam.</div>';
+}
+function render(){refreshSelectors();renderPonds();renderMoney();renderSampling();renderDashboard();}
+render();
+</script>
+</body>
+</html>
